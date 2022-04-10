@@ -31,6 +31,7 @@ class GameViewController: UIViewController {
     
     //nodes
     private var player:Player?
+    private var player2: Player?
     private var cameraStick:SCNNode!
     private var cameraXHolder:SCNNode!
     private var cameraYHolder:SCNNode!
@@ -48,12 +49,14 @@ class GameViewController: UIViewController {
     //enemies
     private var golemsPositionArray = [String:SCNVector3]()
     private var peoplePositionArray = [String:SCNVector3]()
+    private var specialPositionArray = [String:SCNVector3]()
     //MARK:- lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupScene()
         setupPlayer()
+        setupPlayer2()
         setupCamera()
         setupLight()
         setupWallBitmasks()
@@ -101,6 +104,24 @@ class GameViewController: UIViewController {
         player!.setupCollider(with: 0.26)
         player!.setupWeaponCollider(with: 0.26)
     }
+    private func setupPlayer2() {
+        
+        let target = mainScene.rootNode.childNode(withName: "target", recursively: false)!
+        
+     
+        
+        
+        player2 = Player()
+        player2!.scale = SCNVector3Make(0.26, 0.26, 0.26)
+        player2!.position = target.worldPosition
+        player2!.rotation = SCNVector4Make(0, 1, 0, Float.pi)
+        player2?.opacity = 0.0
+        mainScene.rootNode.addChildNode(player2!)
+        
+        player2!.setupCollider(with: 0.26)
+        player2!.setupWeaponCollider(with: 0.26)
+    }
+    
     
     //MARK:- touches + movement
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -272,6 +293,7 @@ class GameViewController: UIViewController {
         
 //        let enemies = mainScene.rootNode.childNode(withName: "Enemies", recursively: false)!
         let people = mainScene.rootNode.childNode(withName: "people", recursively: false)!
+        let special = mainScene.rootNode.childNode(withName: "special", recursively: false)!
         //정보가져가려고 한것. 그림에서도 빈노드로 만든것.
 //        print(enemies)
 //        for child in enemies.childNodes {
@@ -280,8 +302,14 @@ class GameViewController: UIViewController {
 //
 //        }
         
+        
         for child in people.childNodes {
-            peoplePositionArray[child.name!] = child.position
+            peoplePositionArray[child.name!] = child.worldPosition
+            
+        }
+        print(special.childNodes)
+        for child in special.childNodes {
+            specialPositionArray[child.name!] = child.worldPosition
         }
         print(golemsPositionArray)
         setupGolems()
@@ -290,46 +318,34 @@ class GameViewController: UIViewController {
     private func setupGolems() {
         
         let golemScale:Float = 0.083
+        let specialScale:Float = 0.3
         var golems: [Golem] = [Golem]()
-        for i in 1...20 {
+        var specials: [Golem] = [Golem]()
+//        print("peoplep",peoplePositionArray)
+        for i in 1...peoplePositionArray.count {
+            print("\(i)번째 사람: \(peoplePositionArray["inplaceWalk\(i)"]!)")
             golems.append(Golem(enemy: player!, view: gameView))
             golems[i-1].scale = SCNVector3Make(golemScale, golemScale, golemScale)
             print(i)
             golems[i-1].position = peoplePositionArray["inplaceWalk\(i)"]!
         }
-//        let golem1 = Golem(enemy: player!, view: gameView)
-//        golem1.scale = SCNVector3Make(golemScale, golemScale, golemScale)
-//        golem1.position = golemsPositionArray["golem1"]!
-//
-//        let golem2 = Golem(enemy: player!, view: gameView)
-//        golem2.scale = SCNVector3Make(golemScale, golemScale, golemScale)
-//        golem2.position = golemsPositionArray["golem2"]!
-//
-//        let golem3 = Golem(enemy: player!, view: gameView)
-//        golem3.scale = SCNVector3Make(golemScale, golemScale, golemScale)
-//        golem3.position = golemsPositionArray["golem3"]!
-//
-//        let golem4 = Golem(enemy: player!, view: gameView)
-//        golem4.scale = SCNVector3Make(golemScale, golemScale, golemScale)
-//        golem4.position = golemsPositionArray["golem4"]!
-        
         gameView.prepare(golems) {
             (finished) in
             self.prepareHelper(golems: golems, golemScale: golemScale)
         }
-//        gameView.prepare([golem1, golem2, golem3,golem4]) {
-//            (finished) in
-//
-//            self.mainScene.rootNode.addChildNode(golem1)
-//            self.mainScene.rootNode.addChildNode(golem2)
-//            self.mainScene.rootNode.addChildNode(golem3)
-//            self.mainScene.rootNode.addChildNode(golem4)
-//
-//            golem1.setupCollider(scale: CGFloat(golemScale))
-//            golem2.setupCollider(scale: CGFloat(golemScale))
-//            golem3.setupCollider(scale: CGFloat(golemScale))
-//            golem4.setupCollider(scale: CGFloat(golemScale))
-//        }
+        
+        for i in 1...specialPositionArray.count {
+            specials.append(Golem(enemy: player2!, view: gameView))
+            specials[i-1].scale = SCNVector3Make(specialScale, specialScale, specialScale)
+            specials[i-1].position = specialPositionArray["special\(i)"]!
+        }
+
+        
+        gameView.prepare(specials) {
+            (finished) in
+            self.prepareHelper(golems: specials, golemScale: specialScale)
+        }
+
     }
 }
 
@@ -441,6 +457,7 @@ extension GameViewController:SCNSceneRendererDelegate {
 
 extension GameViewController {
     func prepareHelper(golems:[Golem], golemScale:Float){
+        print("count", golems.count)
         for g in golems {
             self.mainScene.rootNode.addChildNode(g)
             g.setupCollider(scale: CGFloat(golemScale))

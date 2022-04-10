@@ -13,7 +13,8 @@ enum GolemAnimationType {
     
     case walk, attack1, dead
 }
-
+//골렘이 공중에 떠있으면 못때림.
+//
 class Golem:SCNNode {
     
     //general
@@ -34,7 +35,7 @@ class Golem:SCNNode {
     private var previousUpdateTime = TimeInterval(0.0)
     private let noticeDistance:Float = 140
     private let movementSpeedLimiter = Float(0.5)
-    
+    var didHit = false
     private var isWalking:Bool = false {
         
         didSet {
@@ -167,7 +168,7 @@ class Golem:SCNNode {
         //get distance
         let distance = GameUtils.distanceBetweenVectors(vector1: enemy.position, vector2: position)
        
-        if distance < noticeDistance && distance > 0.01 {
+        if distance < noticeDistance && distance > 0.001 {
             
             //move
             let vResult = GameUtils.getCoordinatesNeededToMoveToReachNode(form: position, to: enemy.position)
@@ -185,8 +186,8 @@ class Golem:SCNNode {
                 
                 if vx != 0.0 && vz != 0.0 {
                     
-                    position.x += vx * characterSpeed
-                    position.z += vz * characterSpeed 
+                    position.x += vx * characterSpeed * 30
+                    position.z += vz * characterSpeed * 30
                     
                     isWalking = true
                     
@@ -202,8 +203,8 @@ class Golem:SCNNode {
                 var endpoint0 = pos
                 var endpoint1 = pos
                 
-                endpoint0.y -= 5
-                endpoint1.y += 5
+                endpoint0.y -= 2
+                endpoint1.y += 2
                 
                 let results = scene.physicsWorld.rayTestWithSegment(from: endpoint1, to: endpoint0, options: [.collisionBitMask: BitmaskWall, .searchMode: SCNPhysicsWorld.TestSearchMode.closest])
                 
@@ -246,18 +247,20 @@ class Golem:SCNNode {
     //MARK:- collisions
     func setupCollider(scale:CGFloat) {
         
-        let geometry = SCNCapsule(capRadius: 3, height: 44)
+        let geometry = SCNCapsule(capRadius: 1, height: 22)
         geometry.firstMaterial?.diffuse.contents = UIColor.blue
         collider = SCNNode(geometry: geometry)
         collider.name = "golemCollider"
-        collider.position = SCNVector3Make(0, 46, 0)
+        collider.position = SCNVector3Make(0, 22, 0)
         collider.opacity = 1.0
         
         let shapeGeometry = SCNCapsule(capRadius: 3 * scale, height: 44 * scale)
         let physicsShape = SCNPhysicsShape(geometry: shapeGeometry, options: nil)
         collider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
         collider.physicsBody!.categoryBitMask = BitmaskGolem
-        collider.physicsBody!.contactTestBitMask = BitmaskWall | BitmaskPlayer | BitmaskPlayerWeapon
+        
+        collider.physicsBody!.contactTestBitMask = BitmaskPlayer | BitmaskPlayerWeapon
+        //BitmaskWall을 지워도 계단 오를 수 있다.
         
         gameView.prepare([collider]) {
             (finished) in
@@ -286,11 +289,13 @@ class Golem:SCNNode {
         
         attackFrameCounter += 1
         
-        if attackFrameCounter == 10 {
+        if attackFrameCounter == 1 {//원래10
             
-            if isCollideWithEnemy {
+            if isCollideWithEnemy && !didHit {
                 
-                enemy.gotHit(with: 15.0)
+                enemy.gotHit(with: 5)
+                print("hit!")
+                didHit = true
             }
         }
     }

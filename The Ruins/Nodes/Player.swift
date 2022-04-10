@@ -65,8 +65,8 @@ class Player:SCNNode {
     
     //battle
     var isDead = false
-    private let maxHpPoints:Float = 100.0
-    private var hpPoints:Float = 100.0
+    private let maxHpPoints:Float = 100
+    private var hpPoints:Float = 100
     var isAttacking = false
     private var attackTimer:Timer?
     private var attackFrameCounter = 0
@@ -213,7 +213,7 @@ class Player:SCNNode {
         let physicsShape = SCNPhysicsShape(geometry: physicsGeometry, options: nil)
         collider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
         collider.physicsBody!.categoryBitMask = BitmaskPlayer
-        collider.physicsBody!.contactTestBitMask = BitmaskWall
+        collider.physicsBody!.contactTestBitMask = BitmaskWall//이거없앤다고 계단못올라가는거아님
         addChildNode(collider)
     }
     
@@ -231,7 +231,7 @@ class Player:SCNNode {
     
     //MARK:- battle
     func gotHit(with hpPoints:Float) {
-        
+        print("gothit")
         self.hpPoints -= hpPoints
         
         NotificationCenter.default.post(name: NSNotification.Name("hpChanged"), object: nil, userInfo: ["playerMaxHp":maxHpPoints, "currentHp":self.hpPoints])
