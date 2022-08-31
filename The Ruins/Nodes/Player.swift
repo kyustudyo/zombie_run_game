@@ -117,7 +117,6 @@ class Player:SCNNode {
         
         let sceneURL = Bundle.main.url(forResource: scene, withExtension: "dae")!
         let sceneSource = SCNSceneSource(url: sceneURL, options: nil)!
-        
         let animationObject:CAAnimation = sceneSource.entryWithIdentifier(identifier, withClass: CAAnimation.self)!
         
         animationObject.delegate = self
@@ -233,7 +232,7 @@ class Player:SCNNode {
     func gotHit(with hpPoints:Float) {
         print("gothit")
         self.hpPoints -= hpPoints
-        
+        print("hp",hpPoints)
         NotificationCenter.default.post(name: NSNotification.Name("hpChanged"), object: nil, userInfo: ["playerMaxHp":maxHpPoints, "currentHp":self.hpPoints])
         
         if self.hpPoints <= 0 {

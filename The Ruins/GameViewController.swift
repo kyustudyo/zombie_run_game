@@ -61,8 +61,8 @@ class GameViewController: UIViewController {
         setupLight()
         setupWallBitmasks()
         setupEnemies()
-        
         gameState = .playing
+        
     }
     
     override var shouldAutorotate: Bool { return true }
