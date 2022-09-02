@@ -43,11 +43,12 @@ class Golem:SCNNode {
             if oldValue != isWalking {
                 
                 if isWalking {
-                    
+                    print("walking~")
                     addAnimation(walkAnimation, forKey: "walk")
                     
+                    print("walking~",walkAnimation)
                 } else {
-                    
+                    print("no walking~")
                     removeAnimation(forKey: "walk")
                 }
             }
@@ -61,7 +62,7 @@ class Golem:SCNNode {
             if oldValue != isCollideWithEnemy {
                 
                 if isCollideWithEnemy {
-                    
+                    print("no no walking~")
                     isWalking = false
                 }
             }
@@ -99,7 +100,10 @@ class Golem:SCNNode {
         name = "Golem"
         
 //        let idleURL = Bundle.main.url(forResource: "art.scnassets/Scenes/Enemies/Golem@Idle", withExtension: "dae")
-        let idleURL = Bundle.main.url(forResource: "art.scnassets/inplaceWalk", withExtension: "dae")
+//        let idleURL = Bundle.main.url(forResource: "art.scnassets/Injured Run2", withExtension: "dae")
+        let idleURL = Bundle.main.url(forResource: ["art.scnassets/Jump","art.scnassets/Injured Run2", "art.scnassets/Crawling"].randomElement()!, withExtension: "dae")
+        
+        
         let idleScene = try! SCNScene(url: idleURL!, options: nil)
         
         for child in idleScene.rootNode.childNodes {
@@ -108,14 +112,15 @@ class Golem:SCNNode {
         }
         
         addChildNode(daeHolderNode)
-        characterNode = daeHolderNode
-//        characterNode = daeHolderNode.childNode(withName: "CATRigHub002", recursively: true)!
+//        characterNode = daeHolderNode
+        characterNode = daeHolderNode.childNode(withName: "master", recursively: true)!
     }
     
     //MARK:- animations
     private func loadAnimations() {
-        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/inplaceWalk", withIdentifier: "unnamed_animation__0")
-        loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/inplaceWalk", withIdentifier: "unnamed_animation__0")
+//        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/inplaceWalk", withIdentifier: "unnamed_animation__0")
+        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Injured Run", withIdentifier: "master-anim")
+        loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/Mutant Jump Attack", withIdentifier: "master-anim")
 //        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Enemies/Golem@Flight", withIdentifier: "unnamed_animation__1")
         
 //        loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Scenes/Enemies/Golem@Dead", withIdentifier: "Golem@Dead-1")
@@ -168,7 +173,7 @@ class Golem:SCNNode {
         //get distance
         let distance = GameUtils.distanceBetweenVectors(vector1: enemy.position, vector2: position)
        
-        if distance < noticeDistance && distance > 0.001 {
+        if distance < noticeDistance && distance > 0.01 {
             
             //move
             let vResult = GameUtils.getCoordinatesNeededToMoveToReachNode(form: position, to: enemy.position)
@@ -182,7 +187,7 @@ class Golem:SCNNode {
             
             if !isCollideWithEnemy && !isAttacking {
             
-                let characterSpeed = deltaTime * movementSpeedLimiter
+                let characterSpeed = deltaTime * movementSpeedLimiter / Float((1...2).randomElement()!)
                 
                 if vx != 0.0 && vz != 0.0 {
                     
@@ -190,9 +195,11 @@ class Golem:SCNNode {
                     position.z += vz * characterSpeed * 30
                     
                     isWalking = true
+                
+                    print("gol walk", isWalking)
                     
                 } else {
-                    
+                    print("gol walk false", isWalking)
                     isWalking = false
                 }
                 
@@ -241,14 +248,15 @@ class Golem:SCNNode {
         } else {
             
             isWalking = false
+            print("gol walk down")
         }
     }
     
     //MARK:- collisions
     func setupCollider(scale:CGFloat) {
         
-        let geometry = SCNCapsule(capRadius: 1, height: 22)
-        geometry.firstMaterial?.diffuse.contents = UIColor.blue
+        let geometry = SCNCapsule(capRadius: 10, height: 220)
+        geometry.firstMaterial?.diffuse.contents = UIColor.clear
         collider = SCNNode(geometry: geometry)
         collider.name = "golemCollider"
         collider.position = SCNVector3Make(0, 22, 0)
@@ -276,11 +284,12 @@ class Golem:SCNNode {
         
         isAttacking = true
         
+        print("qqqe isatta")
         DispatchQueue.main.async {
-            
+            print("qqqe isatta~~~~")
             self.attackTimer?.invalidate()
             self.attackTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.attackTimerTicked), userInfo: nil, repeats: true)
-            
+            print("attack")
             self.characterNode.addAnimation(self.attack1Animation, forKey: "attack1")
         }
     }
@@ -289,13 +298,13 @@ class Golem:SCNNode {
         
         attackFrameCounter += 1
         
-        if attackFrameCounter == 1 {//원래10
-            
-            if isCollideWithEnemy && !didHit {
-                
-                enemy.gotHit(with: 5)
-                print("hit!")
-                didHit = true
+        if attackFrameCounter == 10 {//원래10
+            print("qqqe1")
+            if isCollideWithEnemy //&& !didHit
+            {
+                print("qqqe2")
+                enemy.gotHit(with: 11)
+//                attackFrameCounter = 0
             }
         }
     }
@@ -336,7 +345,7 @@ extension Golem: CAAnimationDelegate {
         guard let id = anim.value(forKey: "animationId") as? String else { return }
         
         if id == "attack1" {
-            
+            print("qqqe attack끝")
             attackTimer?.invalidate()
             attackFrameCounter = 0
             isAttacking = false

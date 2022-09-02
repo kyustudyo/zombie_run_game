@@ -8,7 +8,9 @@
 
 import Foundation
 import SceneKit
-
+enum Test {
+    
+}
 enum PlayerAnimationType {
     
     case walk, attack1, dead
@@ -26,9 +28,25 @@ class Player:SCNNode {
     private var walkAnimation = CAAnimation()
     private var attack1Animation = CAAnimation()
     private var deadAnimation = CAAnimation()
-    
+    var first = true
+    var count: Int = 0
     //movement
     private var previousUdateTime = TimeInterval(0.0)
+    
+//    var isCollideWithEnemy = false {
+//
+//        didSet {
+//
+//            if oldValue != isCollideWithEnemy {
+//
+//                if isCollideWithEnemy {
+//
+//                    isWalking = false
+//
+//                }
+//            }
+//        }
+//    }
     
     private var isWalking:Bool = false {
         
@@ -65,8 +83,8 @@ class Player:SCNNode {
     
     //battle
     var isDead = false
-    private let maxHpPoints:Float = 100
-    private var hpPoints:Float = 100
+    private let maxHpPoints:Float = 200
+    private var hpPoints:Float = 200
     var isAttacking = false
     private var attackTimer:Timer?
     private var attackFrameCounter = 0
@@ -88,12 +106,13 @@ class Player:SCNNode {
         
         //load dae childs
 //        let playerURL = Bundle.main.url(forResource: "art.scnassets/Scenes/Hero/idle", withExtension: "dae")
-        let playerURL = Bundle.main.url(forResource: "art.scnassets/inplaceWalk", withExtension: "dae")
+        let playerURL = Bundle.main.url(forResource: "art.scnassets/Old Man Idle", withExtension: "dae")
         let playerScene = try! SCNScene(url: playerURL!, options: nil)
         
         for child in playerScene.rootNode.childNodes {
             daeHolderNode.addChildNode(child)
         }
+        
         addChildNode(daeHolderNode)
         
         //set mesh name
@@ -103,13 +122,16 @@ class Player:SCNNode {
     
     //MARK:- animations
     private func loadAnimations() {
-        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/inplaceWalk", withIdentifier: "unnamed_animation__0")
-//        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Hero/walk", withIdentifier: "WalkID")
+        
+        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Fast Run", withIdentifier: "unnamed_animation__0")
+
+//        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Fast Run", withIdentifier: "mixamorig_Hips-anim")
+//        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/walk", withIdentifier: "WalkID")
         
         
 //        loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/Scenes/Hero/attack", withIdentifier: "attackID")
 //
-//        loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Scenes/Hero/die", withIdentifier: "DeathID")
+//        loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Two Handed Sword Death", withIdentifier: "rp_nathan_animated_003_walking_ring_02_r-anim")
         
     }
     
@@ -117,7 +139,16 @@ class Player:SCNNode {
         
         let sceneURL = Bundle.main.url(forResource: scene, withExtension: "dae")!
         let sceneSource = SCNSceneSource(url: sceneURL, options: nil)!
+//        print(sceneSource)
         let animationObject:CAAnimation = sceneSource.entryWithIdentifier(identifier, withClass: CAAnimation.self)!
+//        let sceneURL = Bundle.main.url(forResource: scene, withExtension: "scn")!
+//        print(sceneURL)
+//
+//        let sceneSource = SCNSceneSource(url: sceneURL, options: nil)!
+//        animationFromSceneNamed(path: "Sd")
+        
+//        let animationObject:CAAnimation = animationFromSceneNamed(path: "Sd")!
+        
         
         animationObject.delegate = self
         animationObject.fadeInDuration = 0.2
@@ -152,26 +183,39 @@ class Player:SCNNode {
         if previousUdateTime == 0.0 { previousUdateTime = time }
         
         let deltaTime = Float(min(time-previousUdateTime, 1.0/60.0))
-        let characterSpeed = deltaTime * 13
+        let characterSpeed = deltaTime * 13 * 3.3
         previousUdateTime = time
         
         let initialPosition = position
         
         //move
-        if direction.x != 0.0 && direction.z != 0.0 {
+//        if direction.x != 0.0 && direction.z != 0.0 {
+//        if direction.x != 0.0 && direction.z != 0.0 {
             
+//            //move character
+//            let pos = float3(position)
+//            position = SCNVector3(pos+direction * characterSpeed)
+////            print("관심2", pos,direction,characterSpeed)
+//            //update angle
+//            directionAngle = SCNFloat(atan2f(direction.x, direction.z))
+//
+//            isWalking = true
+//
+//        }
+        
+        if first {
+            
+            isWalking = false
+        } else {
             //move character
             let pos = float3(position)
-            position = SCNVector3(pos+direction * characterSpeed)
-            
+            position = SCNVector3(pos+direction * characterSpeed * 1)
+//            print("관심2", pos,direction,characterSpeed)
             //update angle
             directionAngle = SCNFloat(atan2f(direction.x, direction.z))
             
             isWalking = true
             
-        } else {
-            
-            isWalking = false
         }
         
         //update altidute
@@ -219,20 +263,20 @@ class Player:SCNNode {
     func weaponCollide(with node:SCNNode) {
         
         activeWeaponCollideNodes.insert(node)
-        print("activeWeaponCollideNodes \(activeWeaponCollideNodes.count)")
+//        print("activeWeaponCollideNodes \(activeWeaponCollideNodes.count)")
     }
     
     func weaponUnCollide(with node:SCNNode) {
         
         activeWeaponCollideNodes.remove(node)
-        print("activeWeaponCollideNodes \(activeWeaponCollideNodes.count)")
+//        print("activeWeaponCollideNodes \(activeWeaponCollideNodes.count)")
     }
     
     //MARK:- battle
     func gotHit(with hpPoints:Float) {
-        print("gothit")
+//        print("gothit")
         self.hpPoints -= hpPoints
-        print("hp",hpPoints)
+//        print("hp",hpPoints)
         NotificationCenter.default.post(name: NSNotification.Name("hpChanged"), object: nil, userInfo: ["playerMaxHp":maxHpPoints, "currentHp":self.hpPoints])
         
         if self.hpPoints <= 0 {
@@ -314,7 +358,6 @@ extension Player: CAAnimationDelegate {
         }
     }
 }
-
 
 
 

@@ -18,7 +18,7 @@ class GameView: SCNView {
     private var dpadSprite:SKSpriteNode!
     private var attackButtonSprite:SKSpriteNode!
     private var hpBar:SKSpriteNode!
-    private let hpBarMaxWidth:CGFloat = 150.0
+    private let hpBarMaxWidth:CGFloat = 300.0
     
     //MARK:- lifecycle
     override func awakeFromNib() {
@@ -72,15 +72,15 @@ class GameView: SCNView {
         dpadSprite.xScale = 1.0
         dpadSprite.yScale = 1.0
         dpadSprite.anchorPoint = CGPoint(x: 0.0, y: 0.0)
-        dpadSprite.size = CGSize(width: 150.0, height: 150.0)
-        scene.addChild(dpadSprite)
+        dpadSprite.size = CGSize(width: 75, height: 75)
+//        scene.addChild(dpadSprite)
     }
     
     func virtualDPadBounds() -> CGRect {
         
-        print(bounds)
+//        print(bounds)
         
-        var virtualDPadBounds = CGRect(x: 10.0, y: 10.0, width: 150.0, height: 150.0)
+        var virtualDPadBounds = CGRect(x: 10.0, y: 10.0, width: 75, height: 75)
         
         virtualDPadBounds.origin.y = bounds.size.height - virtualDPadBounds.size.height + virtualDPadBounds.origin.y
         
@@ -91,7 +91,7 @@ class GameView: SCNView {
     private func setupAttackButton(with scene:SKScene) {
         
         attackButtonSprite = SKSpriteNode(imageNamed: "art.scnassets/Assets/attack1.png")
-        attackButtonSprite.position = CGPoint(x: bounds.size.height-110.0, y: 50)
+        attackButtonSprite.position = CGPoint(x: bounds.size.height-30.0, y: 20)
         attackButtonSprite.xScale = 1.0
         attackButtonSprite.yScale = 1.0
         attackButtonSprite.size = CGSize(width: 60.0, height: 60.0)
@@ -112,9 +112,9 @@ class GameView: SCNView {
     //MARK:- HP bar
     private func setupHpBar(with scene:SKScene) {
         
-        hpBar = SKSpriteNode(color: UIColor.green, size: CGSize(width: hpBarMaxWidth, height: 20))
+        hpBar = SKSpriteNode(color: UIColor.blue, size: CGSize(width: hpBarMaxWidth, height: 20))
         hpBar.anchorPoint = CGPoint(x: 0.0, y: 0.0)
-        hpBar.position = CGPoint(x: 15.0, y: bounds.width-35.0)
+        hpBar.position = CGPoint(x: 10, y: 330)
         hpBar.xScale = 1.0
         hpBar.yScale = 1.0
         scene.addChild(hpBar)

@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79498A3328BFB24900C394A0 /* C_R_S_T.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 79498A3228BFB24900C394A0 /* C_R_S_T.mlmodel */; };
+		79498A3628BFB25300C394A0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79498A3428BFB25200C394A0 /* ViewController.swift */; };
+		79498A3728BFB25300C394A0 /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79498A3528BFB25300C394A0 /* VisionObjectRecognitionViewController.swift */; };
+		79498A3928BFB34000C394A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79498A3828BFB34000C394A0 /* Main.storyboard */; };
 		7954289128019AF400C4A841 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7954289028019AF300C4A841 /* Ball.swift */; };
+		79730AE528C1271E006517C4 /* GameSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79730AE428C1271E006517C4 /* GameSound.swift */; };
+		79730AE728C127CF006517C4 /* music.wav in Resources */ = {isa = PBXBuildFile; fileRef = 79730AE628C127CF006517C4 /* music.wav */; };
 		BA0B55011FCC8F4C00F3FFB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B55001FCC8F4C00F3FFB0 /* AppDelegate.swift */; };
 		BA0B55031FCC8F4C00F3FFB0 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = BA0B55021FCC8F4C00F3FFB0 /* art.scnassets */; };
 		BA0B55051FCC8F4C00F3FFB0 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B55041FCC8F4C00F3FFB0 /* GameViewController.swift */; };
-		BA0B55081FCC8F4C00F3FFB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA0B55061FCC8F4C00F3FFB0 /* Main.storyboard */; };
+		BA0B55081FCC8F4C00F3FFB0 /* Main2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA0B55061FCC8F4C00F3FFB0 /* Main2.storyboard */; };
 		BA0B550A1FCC8F4C00F3FFB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA0B55091FCC8F4C00F3FFB0 /* Assets.xcassets */; };
 		BA0B550D1FCC8F4C00F3FFB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA0B550B1FCC8F4C00F3FFB0 /* LaunchScreen.storyboard */; };
 		BA0B55171FCC906100F3FFB0 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B55161FCC906100F3FFB0 /* GameView.swift */; };
@@ -22,12 +28,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		79498A3228BFB24900C394A0 /* C_R_S_T.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = C_R_S_T.mlmodel; sourceTree = "<group>"; };
+		79498A3428BFB25200C394A0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		79498A3528BFB25300C394A0 /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
+		79498A3828BFB34000C394A0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		7954289028019AF300C4A841 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
+		79730AE428C1271E006517C4 /* GameSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSound.swift; sourceTree = "<group>"; };
+		79730AE628C127CF006517C4 /* music.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music.wav; sourceTree = "<group>"; };
 		BA0B54FD1FCC8F4C00F3FFB0 /* The Ruins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Ruins.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA0B55001FCC8F4C00F3FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BA0B55021FCC8F4C00F3FFB0 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		BA0B55041FCC8F4C00F3FFB0 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		BA0B55071FCC8F4C00F3FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BA0B55071FCC8F4C00F3FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main2.storyboard; sourceTree = "<group>"; };
 		BA0B55091FCC8F4C00F3FFB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BA0B550C1FCC8F4C00F3FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BA0B550E1FCC8F4C00F3FFB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -71,10 +83,15 @@
 				BA0B55141FCC901B00F3FFB0 /* Helpers */,
 				BA0B55151FCC902900F3FFB0 /* Nodes */,
 				BA0B55041FCC8F4C00F3FFB0 /* GameViewController.swift */,
+				79498A3428BFB25200C394A0 /* ViewController.swift */,
+				79498A3528BFB25300C394A0 /* VisionObjectRecognitionViewController.swift */,
+				79498A3228BFB24900C394A0 /* C_R_S_T.mlmodel */,
 				BA0B55161FCC906100F3FFB0 /* GameView.swift */,
+				79730AE628C127CF006517C4 /* music.wav */,
 				BA0B55021FCC8F4C00F3FFB0 /* art.scnassets */,
 				BA0B55091FCC8F4C00F3FFB0 /* Assets.xcassets */,
-				BA0B55061FCC8F4C00F3FFB0 /* Main.storyboard */,
+				79498A3828BFB34000C394A0 /* Main.storyboard */,
+				BA0B55061FCC8F4C00F3FFB0 /* Main2.storyboard */,
 				BA0B550B1FCC8F4C00F3FFB0 /* LaunchScreen.storyboard */,
 				BA0B55001FCC8F4C00F3FFB0 /* AppDelegate.swift */,
 				BA0B550E1FCC8F4C00F3FFB0 /* Info.plist */,
@@ -87,6 +104,7 @@
 			children = (
 				BA69294C1FD024C600658857 /* Extensions.swift */,
 				BA5405971FD43F5E00D0CE12 /* GameUtils.swift */,
+				79730AE428C1271E006517C4 /* GameSound.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -161,9 +179,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA0B55031FCC8F4C00F3FFB0 /* art.scnassets in Resources */,
+				79498A3928BFB34000C394A0 /* Main.storyboard in Resources */,
+				79730AE728C127CF006517C4 /* music.wav in Resources */,
 				BA0B550D1FCC8F4C00F3FFB0 /* LaunchScreen.storyboard in Resources */,
 				BA0B550A1FCC8F4C00F3FFB0 /* Assets.xcassets in Resources */,
-				BA0B55081FCC8F4C00F3FFB0 /* Main.storyboard in Resources */,
+				BA0B55081FCC8F4C00F3FFB0 /* Main2.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,12 +194,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79498A3728BFB25300C394A0 /* VisionObjectRecognitionViewController.swift in Sources */,
+				79498A3628BFB25300C394A0 /* ViewController.swift in Sources */,
 				7954289128019AF400C4A841 /* Ball.swift in Sources */,
 				BAB696C41FD369DC0025A4E7 /* Golem.swift in Sources */,
 				BA5405981FD43F5E00D0CE12 /* GameUtils.swift in Sources */,
 				BA69294D1FD024C600658857 /* Extensions.swift in Sources */,
 				BA69294B1FCFFCA800658857 /* Player.swift in Sources */,
+				79498A3328BFB24900C394A0 /* C_R_S_T.mlmodel in Sources */,
 				BA0B55051FCC8F4C00F3FFB0 /* GameViewController.swift in Sources */,
+				79730AE528C1271E006517C4 /* GameSound.swift in Sources */,
 				BA0B55171FCC906100F3FFB0 /* GameView.swift in Sources */,
 				BA0B55011FCC8F4C00F3FFB0 /* AppDelegate.swift in Sources */,
 			);
@@ -188,12 +212,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		BA0B55061FCC8F4C00F3FFB0 /* Main.storyboard */ = {
+		BA0B55061FCC8F4C00F3FFB0 /* Main2.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				BA0B55071FCC8F4C00F3FFB0 /* Base */,
 			);
-			name = Main.storyboard;
+			name = Main2.storyboard;
 			sourceTree = "<group>";
 		};
 		BA0B550B1FCC8F4C00F3FFB0 /* LaunchScreen.storyboard */ = {
@@ -255,7 +279,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -306,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

@@ -154,7 +154,7 @@ class GameViewController: UIViewController {
         if let touch = padTouch {
 //            print("a")
             let displacement = float2(touch.location(in: view)) - float2(touch.previousLocation(in: view))
-            print("csd: \(controllerStoredDirection)")
+//            print("csd: \(controllerStoredDirection)")
             let vMix = mix(controllerStoredDirection, displacement, t: 0.1)
             let vClamp = clamp(vMix, min: -1.0, max: 1.0)
             
@@ -190,7 +190,7 @@ class GameViewController: UIViewController {
             
             let p1 = pov.presentation.convertPosition(SCNVector3(direction), to: nil)
             let p0 = pov.presentation.convertPosition(SCNVector3Zero, to: nil)
-            print("p1\(p1),p0\(p0)")
+//            print("p1\(p1),p0\(p0)")
             direction = float3(Float(p1.x-p0.x), 0.0, Float(p1.z-p0.z))
             
             if direction.x != 0.0 || direction.z != 0.0 {
@@ -255,7 +255,7 @@ class GameViewController: UIViewController {
             switch node.name {
                 
             case let .some(s) where s.range(of: "collision") != nil:
-                print("node#@@@", node)
+//                print("node#@@@", node)
                 collisionNodes.append(node)
                 
             default:
@@ -273,7 +273,7 @@ class GameViewController: UIViewController {
     
     //MARK:- collisions
     private func characterNode(_ characterNode:SCNNode, hitWall wall:SCNNode, withContact contact:SCNPhysicsContact) {
-        print("collide~!~!")
+//        print("collide~!~!")
         if characterNode.name != "collider" && characterNode.name != "golemCollider" { return }
         
         if maxPenetrationDistance > contact.penetrationDistance { return }
@@ -307,11 +307,11 @@ class GameViewController: UIViewController {
             peoplePositionArray[child.name!] = child.worldPosition
             
         }
-        print(special.childNodes)
+//        print(special.childNodes)
         for child in special.childNodes {
             specialPositionArray[child.name!] = child.worldPosition
         }
-        print(golemsPositionArray)
+//        print(golemsPositionArray)
         setupGolems()
     }
     
@@ -323,10 +323,10 @@ class GameViewController: UIViewController {
         var specials: [Golem] = [Golem]()
 //        print("peoplep",peoplePositionArray)
         for i in 1...peoplePositionArray.count {
-            print("\(i)번째 사람: \(peoplePositionArray["inplaceWalk\(i)"]!)")
+//            print("\(i)번째 사람: \(peoplePositionArray["inplaceWalk\(i)"]!)")
             golems.append(Golem(enemy: player!, view: gameView))
             golems[i-1].scale = SCNVector3Make(golemScale, golemScale, golemScale)
-            print(i)
+//            print(i)
             golems[i-1].position = peoplePositionArray["inplaceWalk\(i)"]!
         }
         gameView.prepare(golems) {
@@ -369,7 +369,7 @@ extension GameViewController: SCNPhysicsContactDelegate {
         contact.match(BitmaskGolem) {
             
             (matching, other) in
-            print("2mo", matching,other)
+//            print("2mo", matching,other)
             let golem = matching.parent as! Golem
             if other.name == "collider" { golem.isCollideWithEnemy = true }
             if other.name == "weaponCollider" { player!.weaponCollide(with: golem) }
