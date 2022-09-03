@@ -1,7 +1,7 @@
 
 ## Run away from zombies (도망칠 생각) 🫣 
 
-
+## 😿 사용하지 않는 3D 모델이 다수 포함되어 파일이 매우 큽니다! (300MB)
 <img width="947" alt="스크린샷 2022-09-03 오후 8 05 34" src="https://user-images.githubusercontent.com/77485339/188267602-68dc7c2d-9ee7-40f4-ae20-514110d7fd55.png">
 
 
@@ -25,3 +25,4 @@
 
 ## TMI 
 - 2 기간안에 ML과 Scenekit을 적용하느라, 코드가 정돈되어있지 않습니다,,
+
