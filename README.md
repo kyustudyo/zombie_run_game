@@ -24,5 +24,5 @@
 - https://free3d.com/ko/3d-model/nathan-animated-003-walking-644277.html
 
 ## TMI 
-- 2 기간안에 ML과 Scenekit을 적용하느라, 코드가 정돈되어있지 않습니다,,
+- 기간안에 ML과 Scenekit을 적용하느라, 코드가 정돈되어있지 않습니다,,
 
