@@ -61,6 +61,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79730AEB28C37AEE006517C4 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B55041FCC8F4C00F3FFB0 /* GameViewController.swift */,
+				79498A3428BFB25200C394A0 /* ViewController.swift */,
+				79498A3528BFB25300C394A0 /* VisionObjectRecognitionViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		79730AEC28C37AF7006517C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B55161FCC906100F3FFB0 /* GameView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		79730AED28C37AFF006517C4 /* AIModel */ = {
+			isa = PBXGroup;
+			children = (
+				79498A3228BFB24900C394A0 /* C_R_S_T.mlmodel */,
+			);
+			path = AIModel;
+			sourceTree = "<group>";
+		};
 		BA0B54F41FCC8F4C00F3FFB0 = {
 			isa = PBXGroup;
 			children = (
@@ -80,13 +106,11 @@
 		BA0B54FF1FCC8F4C00F3FFB0 /* The Ruins */ = {
 			isa = PBXGroup;
 			children = (
+				79730AED28C37AFF006517C4 /* AIModel */,
+				79730AEC28C37AF7006517C4 /* View */,
+				79730AEB28C37AEE006517C4 /* ViewController */,
 				BA0B55141FCC901B00F3FFB0 /* Helpers */,
 				BA0B55151FCC902900F3FFB0 /* Nodes */,
-				BA0B55041FCC8F4C00F3FFB0 /* GameViewController.swift */,
-				79498A3428BFB25200C394A0 /* ViewController.swift */,
-				79498A3528BFB25300C394A0 /* VisionObjectRecognitionViewController.swift */,
-				79498A3228BFB24900C394A0 /* C_R_S_T.mlmodel */,
-				BA0B55161FCC906100F3FFB0 /* GameView.swift */,
 				79730AE628C127CF006517C4 /* music.wav */,
 				BA0B55021FCC8F4C00F3FFB0 /* art.scnassets */,
 				BA0B55091FCC8F4C00F3FFB0 /* Assets.xcassets */,
@@ -346,7 +370,7 @@
 				DEVELOPMENT_TEAM = H5PD3P95F5;
 				INFOPLIST_FILE = "The Ruins/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.YOURBUNDLE.The-Ruins";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kyukyu-zombierun";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -361,7 +385,7 @@
 				DEVELOPMENT_TEAM = H5PD3P95F5;
 				INFOPLIST_FILE = "The Ruins/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.YOURBUNDLE.The-Ruins";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kyukyu-zombierun";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

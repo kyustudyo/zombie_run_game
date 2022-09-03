@@ -1,187 +1,29 @@
-/*
-See LICENSE folder for this sample’s licensing information.
-
-Abstract:
-Contains the object recognition view controller for the Breakfast Finder.
-*/
+//
+//  GameViewController.swift
+//  The Ruins
+//
+//  Created by Valsamis Elmaliotis on 27/11/2017.
+//  Copyright © 2017 Valsamis Elmaliotis. All rights reserved.
+//
 
 import UIKit
-import AVFoundation
-import Vision
 import SceneKit
 
-enum cDirection:String {
-    case u
-    case l
-    case d
-    case r
-    case n
+let BitmaskPlayer = 1
+let BitmaskPlayerWeapon = 2
+let BitmaskWall = 64
+let BitmaskGolem = 3
+
+enum GameState {
+    
+    case loading, playing
 }
-var cdirection: cDirection = .n
-
-extension VisionObjectRecognitionViewController {
-
-    @discardableResult
-    func setupVision() -> NSError? {
-        // Setup Vision parts
-        let error: NSError! = nil
-        
-        guard let modelURL = Bundle.main.url(forResource: "C_R_S_T", withExtension: "mlmodelc") else {
-            return NSError(domain: "VisionObjectRecognitionViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
-        }
-        do {
-            let visionModel = try VNCoreMLModel(for: MLModel(contentsOf: modelURL))
-            let objectRecognition = VNCoreMLRequest(model: visionModel, completionHandler: { (request, error) in
-                DispatchQueue.main.async(execute: {
-                    // perform all the UI updates on the main queue
-                    if let results = request.results {
-                        self.drawVisionRequestResults(results)
-                    }
-                })
-            })
-            self.requests = [objectRecognition]
-        } catch let error as NSError {
-//            print("Model loading went wrong: \(error)")
-        }
-        
-        return error
-    }
-    
-    func drawVisionRequestResults(_ results: [Any]) {
-        CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        detectionOverlay.sublayers = nil // remove all the old recognized objects
-        for observation in results where observation is VNRecognizedObjectObservation {
-            guard let objectObservation = observation as? VNRecognizedObjectObservation else {
-                continue
-            }
-            // Select only the label with the highest confidence.
-            let topLabelObservation = objectObservation.labels[0]
-            let objectBounds = VNImageRectForNormalizedRect(objectObservation.boundingBox, Int(bufferSize.width), Int(bufferSize.height))
-            
-            let shapeLayer = self.createRoundedRectLayerWithBounds(objectBounds)
-            shapeLayer.backgroundColor = UIColor.clear.cgColor
-            print("qqq", topLabelObservation.identifier)
-            cdirection = cDirection.init(rawValue: topLabelObservation.identifier) ?? .n
-            if cdirection != .n {
-                player?.first = false
-            }
-            print("qwer", topLabelObservation.identifier, topLabelObservation.confidence)
-//            let textLayer = self.createTextSubLayerInBounds(objectBounds,
-//                                                            identifier: topLabelObservation.identifier,
-//                                                            confidence: topLabelObservation.confidence)
-//            shapeLayer.addSublayer(textLayer)
-            detectionOverlay.addSublayer(shapeLayer)
-        }
-        self.updateLayerGeometry()
-        CATransaction.commit()
-    }
-    
-    
-    func setupLayers() {
-        detectionOverlay = CALayer() // container layer that has all the renderings of the observations
-        detectionOverlay.name = "DetectionOverlay"
-        detectionOverlay.bounds = CGRect(x: 0.0,
-                                         y: 0.0,
-                                         width: bufferSize.width,
-                                         height: bufferSize.height)
-        
-        detectionOverlay.position = CGPoint(x: rootLayer.bounds.midX, y: rootLayer.bounds.midY)
-        rootLayer.addSublayer(detectionOverlay)
-    }
-    
-    func updateLayerGeometry() {
-        let bounds = rootLayer.bounds
-        var scale: CGFloat
-        
-        let xScale: CGFloat = bounds.size.width / bufferSize.height
-        let yScale: CGFloat = bounds.size.height / bufferSize.width
-        
-        scale = fmax(xScale, yScale)
-        if scale.isInfinite {
-            scale = 1.0
-        }
-        CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        
-        // rotate the layer into screen orientation and scale and mirror
-        detectionOverlay.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: scale, y: -scale))
-        // center the layer
-        detectionOverlay.position = CGPoint(x: bounds.midX, y: bounds.midY)
-        
-        CATransaction.commit()
-        
-    }
-    
-//    func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
-//        let textLayer = CATextLayer()
-//        textLayer.name = "Object Label"
-//        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier)\nConfidence:  %.2f", confidence))
-////        print(identifier)
-//        let largeFont = UIFont(name: "Helvetica", size: 24.0)!
-//        formattedString.addAttributes([NSAttributedString.Key.font: largeFont], range: NSRange(location: 0, length: identifier.count))
-//        textLayer.string = formattedString
-//        textLayer.bounds = CGRect(x: 0, y: 0, width: bounds.size.height - 10, height: bounds.size.width - 10)
-//        textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
-//        textLayer.shadowOpacity = 0.7
-//        textLayer.shadowOffset = CGSize(width: 2, height: 2)
-//        textLayer.foregroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.0, 0.0, 0.0, 1.0])
-//        textLayer.contentsScale = 2.0 // retina rendering
-//        // rotate the layer into screen orientation and scale and mirror
-//        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: 1.0, y: -1.0))
-//        return textLayer
-//    }
-    
-    func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
-        let shapeLayer = CALayer()
-        shapeLayer.bounds = bounds
-        shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
-        shapeLayer.name = "Found Object"
-        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 0.2, 0.4])
-        shapeLayer.cornerRadius = 7
-        return shapeLayer
-    }
-    
-}
-
-class VisionObjectRecognitionViewController: ViewController {
-    
-    override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            return
-        }
-        
-        let exifOrientation = exifOrientationFromDeviceOrientation()
-        
-        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientation, options: [:])
-        do {
-            try imageRequestHandler.perform(self.requests)
-        } catch {
-//            print(error)
-        }
-    }
-    
-    override func setupAVCapture() {
-        super.setupAVCapture()
-        
-        // setup Vision parts
-        setupLayers()
-        updateLayerGeometry()
-        setupVision()
-        
-        // start the capture
-        startCaptureSession()
-    }
-    
-    private var detectionOverlay: CALayer! = nil
-    
-    // Vision parts
-    private var requests = [VNRequest]()
+//stage복붙 할때 카메라 이상해서 다시 카메라 만들어서 넣어야함.
+//캐릭터 속도가 느려 안가느줄
+class GameViewController: UIViewController {
     
     //scene
-    var gameView:GameView {
-        return view.subviews.first as! GameView
-    }
+    var gameView:GameView { return view as! GameView }
     var mainScene:SCNScene!
     
     //general
@@ -247,27 +89,28 @@ class VisionObjectRecognitionViewController: ViewController {
         
         gameView.scene = mainScene
         gameView.isPlaying = true
-//        gameView.allowsCameraControl = true
     }
     
     //MARK:- player
     private func setupPlayer() {
         
         player = Player()
-        GameSound.music(self.player!)
-        player!.scale = SCNVector3Make(0.14, 0.14, 0.14)
-        player!.position = SCNVector3Make(1.0, 0.0, 0.0)
-        player!.rotation = SCNVector4Make(0, 0, 0, Float.pi)
+        player!.scale = SCNVector3Make(0.26, 0.26, 0.26)
+        player!.position = SCNVector3Make(0.0, 0.0, 0.0)
+        player!.rotation = SCNVector4Make(0, 1, 0, Float.pi)
         
         mainScene.rootNode.addChildNode(player!)
         
-        player!.setupCollider(with: 14)
-        player!.setupWeaponCollider(with: 14)
+        player!.setupCollider(with: 0.26)
+        player!.setupWeaponCollider(with: 0.26)
     }
     private func setupPlayer2() {
         
         let target = mainScene.rootNode.childNode(withName: "target", recursively: false)!
-
+        
+     
+        
+        
         player2 = Player()
         player2!.scale = SCNVector3Make(0.26, 0.26, 0.26)
         player2!.position = target.worldPosition
@@ -355,17 +198,7 @@ class VisionObjectRecognitionViewController: ViewController {
                 direction = normalize(direction)
             }
         }
-        print("qw!",direction)
         
-        switch cdirection {
-        case .r: direction = .init(x: 1, y: 0, z: 0)
-        case .d: direction = .init(x: 0, y: 0, z: 1)
-        case .l: direction = .init(x: -1, y: 0, z: 0)
-        case .u: direction = .init(x: 0, y: 0, z: -1)
-            
-        default: direction = .zero
-        }
-//        print("direction!!:\(direction)")
         return direction
     }
 
@@ -377,9 +210,6 @@ class VisionObjectRecognitionViewController: ViewController {
         cameraXHolder = mainScene.rootNode.childNode(withName: "xHolder", recursively: true)!
         
         cameraYHolder = mainScene.rootNode.childNode(withName: "yHolder", recursively: true)!
-        
-        cameraStick.light?.attenuationEndDistance = .greatestFiniteMagnitude
-        cameraStick.light?.attenuationStartDistance = 0
     }
     
     private func panCamera(_ direction:float2) {
@@ -395,14 +225,8 @@ class VisionObjectRecognitionViewController: ViewController {
         let currY = cameraYHolder.rotation
         var yRotationValue = currY.w + directionToPan.y * panReducer
         
-        if yRotationValue < -0.94 {
-            yRotationValue = -0.94
-            
-        }
-        if yRotationValue > 0.46 {
-            yRotationValue = 0.46
-            
-        }
+        if yRotationValue < -0.94 { yRotationValue = -0.94 }
+        if yRotationValue > 0.46 { yRotationValue = 0.46 }
         
         cameraXHolder.rotation = SCNVector4Make(0, 1, 0, xRotationValue)
         cameraYHolder.rotation = SCNVector4Make(1, 0, 0, yRotationValue)
@@ -417,9 +241,8 @@ class VisionObjectRecognitionViewController: ViewController {
     
     func updateFollowersPositions() {//캐릭터 움직이면 빛하고, 카메라 따라가게.
         
-        cameraStick.position = SCNVector3Make(player!.position.x, 30.0, player!.position.z)
-        lightStick.position = SCNVector3Make(player!.position.x, 30.0, player!.position.z)
-        print(cameraStick.position)
+        cameraStick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+        lightStick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
     }
     
     //MARK:- walls
@@ -450,9 +273,9 @@ class VisionObjectRecognitionViewController: ViewController {
     
     //MARK:- collisions
     private func characterNode(_ characterNode:SCNNode, hitWall wall:SCNNode, withContact contact:SCNPhysicsContact) {
-        print("collide~!~!")
+//        print("collide~!~!")
         if characterNode.name != "collider" && characterNode.name != "golemCollider" { return }
-        print("collide~!~!collide~!~!collide~!~!")
+        
         if maxPenetrationDistance > contact.penetrationDistance { return }
         
         maxPenetrationDistance = contact.penetrationDistance
@@ -480,8 +303,9 @@ class VisionObjectRecognitionViewController: ViewController {
 //        }
         
         
-        for (i,child) in people.childNodes.enumerated() {
+        for child in people.childNodes {
             peoplePositionArray[child.name!] = child.worldPosition
+            
         }
 //        print(special.childNodes)
         for child in special.childNodes {
@@ -490,32 +314,30 @@ class VisionObjectRecognitionViewController: ViewController {
 //        print(golemsPositionArray)
         setupGolems()
     }
-    var golemScale:Double = 0.3
+    
     private func setupGolems() {
         
-        
+        let golemScale:Float = 0.083
         let specialScale:Float = 0.3
         var golems: [Golem] = [Golem]()
         var specials: [Golem] = [Golem]()
 //        print("peoplep",peoplePositionArray)
         for i in 1...peoplePositionArray.count {
-            if i > 10 { break }
 //            print("\(i)번째 사람: \(peoplePositionArray["inplaceWalk\(i)"]!)")
             golems.append(Golem(enemy: player!, view: gameView))
-            golemScale = [0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39].randomElement()! / 2
-            golems[i-1].scale = SCNVector3Make(Float(golemScale), Float(golemScale), Float(golemScale))
+            golems[i-1].scale = SCNVector3Make(golemScale, golemScale, golemScale)
 //            print(i)
             golems[i-1].position = peoplePositionArray["inplaceWalk\(i)"]!
         }
         gameView.prepare(golems) {
             (finished) in
-            self.prepareHelper(golems: golems, golemScale: Float(self.golemScale))
+            self.prepareHelper(golems: golems, golemScale: golemScale)
         }
         
         for i in 1...specialPositionArray.count {
-//            specials.append(Golem(enemy: player2!, view: gameView))
-//            specials[i-1].scale = SCNVector3Make(specialScale, specialScale, specialScale)
-//            specials[i-1].position = specialPositionArray["special\(i)"]!
+            specials.append(Golem(enemy: player2!, view: gameView))
+            specials[i-1].scale = SCNVector3Make(specialScale, specialScale, specialScale)
+            specials[i-1].position = specialPositionArray["special\(i)"]!
         }
 
         
@@ -527,7 +349,10 @@ class VisionObjectRecognitionViewController: ViewController {
     }
 }
 
-extension VisionObjectRecognitionViewController: SCNPhysicsContactDelegate {
+//MARK:- extensions
+
+//physics
+extension GameViewController: SCNPhysicsContactDelegate {
     
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         
@@ -536,7 +361,7 @@ extension VisionObjectRecognitionViewController: SCNPhysicsContactDelegate {
         //if player collide with wall
         contact.match(BitmaskWall) {
             (matching, other) in
-//            print("1mo",matching,other)
+            print("1mo",matching,other)
             self.characterNode(other, hitWall: matching, withContact: contact)
         }
         
@@ -565,10 +390,7 @@ extension VisionObjectRecognitionViewController: SCNPhysicsContactDelegate {
             (matching, other) in
             
             let golem = matching.parent as! Golem
-            if other.name == "collider" {
-                golem.isCollideWithEnemy = true
-                print("iscollide true~")
-            }
+            if other.name == "collider" { golem.isCollideWithEnemy = true }
             if other.name == "weaponCollider" { player!.weaponCollide(with: golem) }
         }
     }
@@ -587,7 +409,7 @@ extension VisionObjectRecognitionViewController: SCNPhysicsContactDelegate {
 }
 
 //game loop
-extension VisionObjectRecognitionViewController: SCNSceneRendererDelegate {
+extension GameViewController:SCNSceneRendererDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
 //
@@ -609,10 +431,7 @@ extension VisionObjectRecognitionViewController: SCNSceneRendererDelegate {
 
         let scene = gameView.scene!
         let direction = characterDirection()
-        
-//        cdirection = .n
-        
-//        print("관심,", direction)
+
         player!.walkInDirection(direction, time: time, scene: scene)
 
         updateFollowersPositions()
@@ -636,7 +455,7 @@ extension VisionObjectRecognitionViewController: SCNSceneRendererDelegate {
 }
 
 
-extension VisionObjectRecognitionViewController {
+extension GameViewController {
     func prepareHelper(golems:[Golem], golemScale:Float){
 //        print("count", golems.count)
         for g in golems {

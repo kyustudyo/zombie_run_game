@@ -183,7 +183,7 @@ class Player:SCNNode {
         if previousUdateTime == 0.0 { previousUdateTime = time }
         
         let deltaTime = Float(min(time-previousUdateTime, 1.0/60.0))
-        let characterSpeed = deltaTime * 13 * 3.3
+        let characterSpeed = deltaTime * 13 * 6
         previousUdateTime = time
         
         let initialPosition = position
